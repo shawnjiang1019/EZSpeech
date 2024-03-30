@@ -69,3 +69,6 @@ hello, Speaker Tag: unknown
  English speak English what, Speaker Tag: unknown
  this is so odd, Speaker Tag: unknown
  1 start exit, Speaker Tag: unknown
+, Speaker Tag: unknown
+hello currently we are transcribing, Speaker Tag: unknown
+ exit, Speaker Tag: unknown
