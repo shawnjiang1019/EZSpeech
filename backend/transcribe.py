@@ -117,6 +117,7 @@ class MicrophoneStream:
 
 
 def listen_print_loop(responses: object) -> str:
+    
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -137,6 +138,7 @@ def listen_print_loop(responses: object) -> str:
     Returns:
         The transcribed text.
     """
+
     num_chars_printed = 0
     for response in responses:
         if not response.results:
@@ -166,20 +168,22 @@ def listen_print_loop(responses: object) -> str:
             num_chars_printed = len(transcript)
 
         else:
+            
             print(transcript + overwrite_chars)
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
             if re.search(r"\b(exit|quit)\b", transcript, re.I):
                 print("Exiting..")
-                break
+                return transcript
+
 
             num_chars_printed = 0
-
     return transcript
 
 
 def main() -> None:
+    
     """Transcribe speech from audio file."""
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
@@ -204,16 +208,51 @@ def main() -> None:
         )
 
         responses = client.streaming_recognize(streaming_config, requests)
-
+        
         # Now, put the transcription responses to use.
         listen_print_loop(responses)
+        
 
 
 #endpoint where we call the main script
-@app.route('/transcribe', methods=['GET'])
-def transcribe_audio():
-    main()
-    
+#endpoint where we call the main script
+@app.route('/transcribe/<language>', methods=['GET'])
+def transcribe_audio(language):
+    # Open the file in append mode
+    with open('test.txt', 'a') as output:
+        """Transcribe speech from audio file."""
+        # See http://g.co/cloud/speech/docs/languages
+        # for a list of supported languages.
+        language_code = language  # a BCP-47 language tag
+
+        client = speech.SpeechClient.from_service_account_file('C:/Users/shawn/Documents/EZSpeech/easyspeech-418815-aa07c590833f.json')
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=RATE,
+            language_code=language_code,
+        )
+
+        streaming_config = speech.StreamingRecognitionConfig(
+            config=config, interim_results=True
+        )
+
+        with MicrophoneStream(RATE, CHUNK) as stream:
+            audio_generator = stream.generator()
+            requests = (
+                speech.StreamingRecognizeRequest(audio_content=content)
+                for content in audio_generator
+            )
+
+            responses = client.streaming_recognize(streaming_config, requests)
+
+            # Now, put the transcription responses to use.
+            text = listen_print_loop(responses)
+            print("Preparing to print out the text: \n")
+            print(text)
+            
+            # Append the transcribed text to the file
+            output.write(text + '\n')
+
     
 
 if __name__ == "__main__":
