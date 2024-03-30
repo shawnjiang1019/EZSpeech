@@ -27,4 +27,6 @@ def translate_text(target: str, text: str) -> dict:
 
     return result
 
+#first argument - language code to be translated
+#second argument - language text to be translated from 
 print(translate_text('en', 'နေ‌‌ကောင်းလား'))
