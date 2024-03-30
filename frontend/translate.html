@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Conversion Tool</title>
+    <link href="translate.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Welcome to EZSPEECH</h1>
+    </header>
+    <div class="container">
+        <div class="buttons">
+            <button id="startButton" class="button">Start</button>
+            <button id="stopButton" class="button">Stop</button>
+        </div>
+        <div class="language-selectors">
+            <div class="language-selector">
+                <label for="user1Language">User 1 Language</label>
+                <select id="user1Language" class="language-dropdown">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ko">Korean</option>
+                    <option value="ru">Russian</option>
+                    <option value="ar">Arabic</option>
+                </select>
+            </div>
+            <div class="language-selector">
+                <label for="user2Language">User 2 Language</label>
+                <select id="user2Language" class="language-dropdown">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ko">Korean</option>
+                    <option value="ru">Russian</option>
+                    <option value="ar">Arabic</option>
+                </select>
+            </div>
+        </div>
+       
+        
+        
+        <div class="main-content">
+            <h3 class="listen">User1:</h3>
+            <div class="listening" id="listening">
+                <h3></h3>
+                <!-- User input will be displayed here -->
+            </div>
+            <h3 class="response">User2:</h3>
+            <div class="responses" id="responses">
+                <h3></h3>
+                <!-- Responses will be listed here -->
+            </div>
+        </div>
+        <a href="index.html" class="button" id="backButton">Back to Home</a>
+    </div>
+</body>
+<script src="script.js"></script>
+  
+</html>

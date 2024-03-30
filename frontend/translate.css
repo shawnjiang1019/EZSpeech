@@ -1,0 +1,83 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100%;
+    background: #ecf0f1;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+}
+header, section {
+    padding: 20px 0;
+}
+h1 {
+    text-align: center;
+    color: #007bff;
+}
+
+.buttons, .language-selectors, .main-content {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 1rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.button:last-child {
+    margin-right: 0;
+}
+
+.language-selector {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.language-dropdown {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.listening, .responses {
+    flex-basis: 49%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+    height: 300px; /* Or any other fixed height */
+    overflow-y: auto;
+}
+
+#backButton {
+    background-color: #95a5a6;
+    width: auto;
+    padding: 10px 50px;
+}
+
+/* Adjust the background-color on hover for buttons */
+.button:hover {
+    filter: brightness(90%);
+}
