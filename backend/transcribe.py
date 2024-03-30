@@ -116,8 +116,7 @@ class MicrophoneStream:
             yield b"".join(data)
 
 
-def listen_print_loop(responses: object) -> str:
-    
+def listen_print_loop(responses: object, file_name: str) -> str:
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -134,11 +133,12 @@ def listen_print_loop(responses: object) -> str:
 
     Args:
         responses: List of server responses
+        file_name: Name of the file to write the transcription to
 
     Returns:
         The transcribed text.
     """
-
+    output = open(f'{file_name}.txt', 'a')
     num_chars_printed = 0
     for response in responses:
         if not response.results:
@@ -148,6 +148,7 @@ def listen_print_loop(responses: object) -> str:
         # the first result being considered, since once it's `is_final`, it
         # moves on to considering the next utterance.
         result = response.results[0]
+
         if not result.alternatives:
             continue
 
@@ -168,39 +169,98 @@ def listen_print_loop(responses: object) -> str:
             num_chars_printed = len(transcript)
 
         else:
-            
-            print(transcript + overwrite_chars)
+            speaker_tag = result.speaker_tag if hasattr(result, 'speaker_tag') else 'unknown'
+            output.write(transcript + overwrite_chars + f', Speaker Tag: {speaker_tag}\n')
+            print(transcript + overwrite_chars + f', Speaker Tag: {speaker_tag}')
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
+
+            # Switch languages if it hears a keyword:
+
+            
+
+
             if re.search(r"\b(exit|quit)\b", transcript, re.I):
                 print("Exiting..")
+                output.close()
                 return transcript
-
 
             num_chars_printed = 0
     return transcript
-
-
-def main() -> None:
+# def main() -> None:
     
-    """Transcribe speech from audio file."""
-    # See http://g.co/cloud/speech/docs/languages
-    # for a list of supported languages.
-    language_code = "en-US"  # a BCP-47 language tag
+#     """Transcribe speech from audio file."""
+#     # See http://g.co/cloud/speech/docs/languages
+#     # for a list of supported languages.
+#     language_code = "en-US"  # a BCP-47 language tag
 
-    client = speech.SpeechClient.from_service_account_file('C:/Users/shawn/Documents/EZSpeech/easyspeech-418815-aa07c590833f.json');
+#     client = speech.SpeechClient.from_service_account_file('C:/Users/shawn/Documents/EZSpeech/easyspeech-418815-aa07c590833f.json');
+#     #config to detect multiple people
+#     diarization_config = speech.SpeakerDiarizationConfig(
+#         enable_speaker_diarization=True,
+#         diarization_speaker_count=2
+
+#     )
+    
+#     config = speech.RecognitionConfig(
+#         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+#         sample_rate_hertz=RATE,
+#         language_code=language_code,
+#         diarization_config=diarization_config,
+        
+#     )
+    
+
+#     streaming_config = speech.StreamingRecognitionConfig(
+#         config=config, interim_results=True
+#     )
+
+#     with MicrophoneStream(RATE, CHUNK) as stream:
+#         audio_generator = stream.generator()
+#         requests = (
+#             speech.StreamingRecognizeRequest(audio_content=content)
+#             for content in audio_generator
+#         )
+
+#         responses = client.streaming_recognize(streaming_config, requests)
+        
+#         # Now, put the transcription responses to use.
+#         listen_print_loop(responses)
+        
+
+
+#endpoint where we call the main script
+#endpoint where we call the main script
+@app.route('/transcribe/<language>', methods=['GET'])
+def transcribe_audio(language):
+   
+    
+    language_code = language  
+    
+    client = speech.SpeechClient.from_service_account_file('C:/Users/shawn/Documents/EZSpeech/easyspeech-418815-aa07c590833f.json')  # Update with your service account path
+    
+    # Configure speaker diarization
+    diarization_config = speech.SpeakerDiarizationConfig(
+        enable_speaker_diarization=True,
+        min_speaker_count=2,
+        max_speaker_count=2
+    )
+    
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
         sample_rate_hertz=RATE,
-        language_code=language_code,
+        language_code='en-US',  # Specify multiple languages here
+        diarization_config=diarization_config,
+        alternative_language_codes=['zh-CN', 'fr-FR']  # Specify alternative languages here
     )
 
     streaming_config = speech.StreamingRecognitionConfig(
-        config=config, interim_results=True
+        config=config,
+        interim_results=True
     )
 
-    with MicrophoneStream(RATE, CHUNK) as stream:
+    with MicrophoneStream(RATE, CHUNK) as stream:  
         audio_generator = stream.generator()
         requests = (
             speech.StreamingRecognizeRequest(audio_content=content)
@@ -209,49 +269,9 @@ def main() -> None:
 
         responses = client.streaming_recognize(streaming_config, requests)
         
-        # Now, put the transcription responses to use.
-        listen_print_loop(responses)
-        
+        listen_print_loop(responses, 'text')
 
-
-#endpoint where we call the main script
-#endpoint where we call the main script
-@app.route('/transcribe/<language>', methods=['GET'])
-def transcribe_audio(language):
-    # Open the file in append mode
-    with open('test.txt', 'a') as output:
-        """Transcribe speech from audio file."""
-        # See http://g.co/cloud/speech/docs/languages
-        # for a list of supported languages.
-        language_code = language  # a BCP-47 language tag
-
-        client = speech.SpeechClient.from_service_account_file('C:/Users/shawn/Documents/EZSpeech/easyspeech-418815-aa07c590833f.json')
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=RATE,
-            language_code=language_code,
-        )
-
-        streaming_config = speech.StreamingRecognitionConfig(
-            config=config, interim_results=True
-        )
-
-        with MicrophoneStream(RATE, CHUNK) as stream:
-            audio_generator = stream.generator()
-            requests = (
-                speech.StreamingRecognizeRequest(audio_content=content)
-                for content in audio_generator
-            )
-
-            responses = client.streaming_recognize(streaming_config, requests)
-
-            # Now, put the transcription responses to use.
-            text = listen_print_loop(responses)
-            print("Preparing to print out the text: \n")
-            print(text)
-            
-            # Append the transcribed text to the file
-            output.write(text + '\n')
+    return "Transcription started for language: " + language_code
 
     
 
