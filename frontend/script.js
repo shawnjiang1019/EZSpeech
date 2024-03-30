@@ -19,6 +19,8 @@ function updateListeningText() {
         console.error('There was a problem with your fetch operation:', error);
       });
   }
+  updateListeningText(); // Update immediately then start interval
+  intervalId = setInterval(updateListeningText, 5000);
 
 document.getElementById('startButton').addEventListener('click', () => {
 if (intervalId === null) { // Start only if not already started
@@ -33,4 +35,4 @@ if (intervalId !== null) {
   intervalId = null; // Reset the interval ID
   document.getElementById('listening').innerText = "";
 }
- });
+});
