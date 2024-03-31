@@ -10,7 +10,6 @@ import pyaudio
 
 
 #create the flask app
-app = Flask(__name__)
 # Audio recording parameters
 RATE = 16000
 CHUNK = int(RATE / 10)  # 100ms
@@ -169,9 +168,9 @@ def listen_print_loop(responses: object, file_name: str) -> str:
             num_chars_printed = len(transcript)
 
         else:
-            speaker_tag = result.speaker_tag if hasattr(result, 'speaker_tag') else 'unknown'
-            output.write(transcript + overwrite_chars + f', Speaker Tag: {speaker_tag}\n')
-            print(transcript + overwrite_chars + f', Speaker Tag: {speaker_tag}')
+            
+            output.write(transcript + overwrite_chars +'\n')
+            print(transcript + overwrite_chars)
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
@@ -232,7 +231,6 @@ def listen_print_loop(responses: object, file_name: str) -> str:
 
 #endpoint where we call the main script
 #endpoint where we call the main script
-@app.route('/transcribe/<language>', methods=['GET'])
 def transcribe_audio(language):
    
     
@@ -275,5 +273,3 @@ def transcribe_audio(language):
 
     
 
-if __name__ == "__main__":
-  app.run(debug=True)
