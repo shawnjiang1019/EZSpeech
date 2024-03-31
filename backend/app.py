@@ -62,14 +62,12 @@ def translate_file(language):
     lines=[]
     for line in input:
         lines.append(line.strip())
-    print(lines)
     translated = ''
     for line in lines:
         translated = translate_text(language, line)
         #write the text into this file
-        target.write(translated)
-        print(translated)
-    
+        
+        target.write(translated['translatedText'] + '\n')
     
     return "Translated"
 
