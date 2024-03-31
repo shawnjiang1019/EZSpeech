@@ -62,7 +62,7 @@
                 <!-- Responses will be listed here -->
             </div>
         </div>
-        <a href="index.html" class="button" id="backButton">Back to Home</a>
+        <a href="{{ url_for('index') }}" class="button" id="backButton">Back to Home</a>
     </div>
 </body>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>

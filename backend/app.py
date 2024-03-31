@@ -11,6 +11,15 @@ import pyaudio
 
 app = Flask(__name__)
 
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/translate') 
+def translate():
+    return render_template('translate.html')
+
 @app.route('/transcribe/<language>', methods=['GET'])
 def transcribe_audio(language):
    
