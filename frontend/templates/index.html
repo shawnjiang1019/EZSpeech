@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversion Translation Service</title>
-    <link href="index.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -12,7 +12,7 @@
             <h1>Welcome to EZSPEECH</h1>
         </header>
         
-        <img src="logo.webp" alt="logo" class="main-image">
+        <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="logo" class="main-image">
 
         <section class="features">
             <h2>Features</h2>
@@ -28,7 +28,7 @@
             </p>
         </section>
         
-        <a href="translate.html" class="cta-button">Get Started Now</a>
+        <a href="{{ url_for('translate') }}" class="cta-button">Get Started Now</a>
     </div>
 </body>
 </html>

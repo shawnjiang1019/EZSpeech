@@ -3,7 +3,7 @@ let intervalId = null; // This will store the interval ID
 function updateListeningText() {
     // Assuming 'listening.txt' is the text file you want to fetch.
     // Replace the URL with the actual path to your text file.
-    fetch('dummy_data.txt')
+    fetch("{{ url_for('static', filename='data/dummy_data.txt') }}")
       .then(response => {
         // Check if the request was successful
         if (!response.ok) {

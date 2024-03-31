@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Language Conversion Tool</title>
-    <link href="translate.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/translate.css') }}" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -65,6 +65,6 @@
         <a href="index.html" class="button" id="backButton">Back to Home</a>
     </div>
 </body>
-<script src="script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
   
 </html>
